@@ -1,0 +1,52 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  background: #813631;
+  margin-bottom: 65px;
+}
+
+.jumbotron-custom {
+  background-image: url("../images/simon-launay-409361-unsplash.jpg");
+  background-size: cover;
+  background-position: center center;
+  border-radius: 6px;
+  margin: 20px 0px 20px 0px;
+}
+
+.display-4 {
+  font-family: "Fredoka One", cursive;
+  color: #fdfefe;
+  text-shadow: 2px 2px #000000;
+}
+
+.lead {
+  font-family: 'Roboto Condensed', sans-serif;
+  color: #000000;
+  font-size: 32px;
+  background-color: rgba(52, 152, 219,0.6);
+}
+
+.add-box {
+  /* margin: 0px 0px 20px 0px; */
+}
+
+.card-custom {
+  background-color: #813631;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  height: 65px;
+  line-height: 55px;
+  width: 100%;
+  background-color: #0C1C2C;
+  color: #fdfefe;
+  text-align: center;
+  font-size: 12px;
+  border-top: 5px solid #fdfefe;
+  font-family: "IBM Plex Mono", monospace;
+}
