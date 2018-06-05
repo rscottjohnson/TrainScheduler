@@ -23,13 +23,19 @@
       </div>
     </div>
 
+    <br>
+    <div class="row" id="current-time">
+
+    </div>
+    <br>
+
     <div class="row">
       <div class="col-md-12">
         <div class="card" style="width: 100%;">
           <div class="card-body train-table">
             <h2 class="card-title">Current Train Schedule</h2>
 
-            <!--Table for display of train schedule information -->
+            <!-- Table for display of train schedule information -->
             <table class="table">
               <thead>
                 <tr>
@@ -40,6 +46,8 @@
                   <th scope="col">Minutes Away</th>
                 </tr>
               </thead>
+
+              <!-- New train info will be appended here -->
               <tbody id="tablebody">
 
               </tbody>
@@ -78,13 +86,14 @@
                 <input type="text" class="form-control" id="newFrequencyID" placeholder="Frequency">
               </div>
 
-              <button id="submitButton" type="button" class="btn btn-primary">Submit</button>
+              <button id="submitButton" type="button" class="btn btn-primary btn-custom">Submit</button>
             </form>
           </div>
         </div>
       </div>
     </div>
-    <hr>
+    <br>
+    <br>
   </div>
 
   <!-- Sticky footer -->

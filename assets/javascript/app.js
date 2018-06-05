@@ -12,14 +12,17 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
-// Set some initial values for our variables to be used
+// Set some initial values for our variables
 var trainName = "";
 var destination = "";
 var firstTime = "";
 var frequency = 0;
-var currentTime = "";
-var minutesAway = 0;
-var nextArrival = "";
+
+window.onload = function () {
+  // Keep the countdown timer from starting
+  var currTimeDisplay = moment().format("hh:mm A");
+  $("#current-time").html("<h1>The current time is: " + currTimeDisplay + "</h1>");
+};
 
 
 // Event listenter for the submit button click event
@@ -34,55 +37,79 @@ $("#submitButton").on("click", function (event) {
 
   firstTime = $("#newTimeID").val().trim();
   console.log("First train time is: " + firstTime);
-  var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
-  
+
   frequency = $("#newFrequencyID").val().trim();
   console.log("Train frequency: " + frequency);
 
-  currentTime = moment().format("hh:mm");
+  database.ref().push({
+    TrainName: trainName,
+    Destination: destination,
+    FirstTrainTime: firstTime,
+    Frequency: frequency,
+    timeSubmitted: firebase.database.ServerValue.TIMESTAMP
+  });
+
+  $("#newTrainID").val("");
+  $("#newDestinationID").val("");
+  $("#newTimeID").val("");
+  $("#newFrequencyID").val("");
+
+});
+
+// Firebase watcher .on("child_added"
+database.ref().on("child_added", function (snapshot) {
+  // storing the snapshot.val() in a variable for convenience
+  var sv = snapshot.val();
+
+  console.log(sv.TrainName);
+  console.log(sv.Destination);
+  console.log(sv.FirstTrainTime);
+  console.log(sv.Frequency);
+
+  var firstTimeConverted = moment(sv.FirstTrainTime, "HH:mm").subtract(1, "days");
+
+  var currentTime = moment().format("hh:mm");
   console.log("Current time: " + currentTime);
-  
+
   // Difference between the times
   var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
   console.log("Difference in time in minutes is: " + diffTime);
 
   // Time apart (remainder)
-  var remainder = diffTime % frequency;
+  var remainder = diffTime % sv.Frequency;
   console.log("Time remainder: " + remainder);
 
   // Minutes Until Train
-  minutesAway = frequency - remainder;
+  var minutesAway = sv.Frequency - remainder;
   console.log("Minutes until the next train: " + minutesAway);
 
   // Next Train
-  nextArrival = moment().add(minutesAway, "minutes");
+  var nextArrival = moment().add(minutesAway, "minutes");
+  var nextArrivalConverted = moment(nextArrival).format("hh:mm A");
   console.log("Arrival time: " + moment(nextArrival).format("hh:mm"));
 
-  database.ref().push({
-    TrainName: trainName,
-    Destination: destination,
-    Frequency: frequency,
-    NextArrival: nextArrival,
-    MinutesAway: minutesAway,
-    timeSubmitted: firebase.database.ServerValue.TIMESTAMP
-  });
-});
-
-
-// Firebase watcher .on("child_added"
-database.ref().on("child_added", function(snapshot) {
-  // storing the snapshot.val() in a variable for convenience
-  var sv = snapshot.val();
-
   //add new rows to table
-  $("#tablebody").append($("<tr><td>"
-  +sv.trainName+"</td><td>"
-  +sv.destination+"</td><td>"
-  +sv.frequency+"</td><td>"
-  +sv.nextArrival+"</td><td>"
-  +sv.minutesAway+"</td></tr>"));
+  var trainRow = $("<tr>");
+  var trainNameData = $("<td>");
+  trainNameData.append(sv.TrainName);
+  var destinationData = $("<td>");
+  destinationData.append(sv.Destination);
+  var frequencyData = $("<td>");
+  frequencyData.append(sv.Frequency);
+  var arrivalData = $("<td>");
+  arrivalData.append(nextArrivalConverted);
+  var minutesData = $("<td>");
+  minutesData.append(minutesAway);
+
+  trainRow.append(trainNameData);
+  trainRow.append(destinationData);
+  trainRow.append(frequencyData);
+  trainRow.append(arrivalData);
+  trainRow.append(minutesData);
+
+  $("#tablebody").append(trainRow);
 
   // Handle the errors
-}, function(errorObject) {
+}, function (errorObject) {
   console.log("Errors handled: " + errorObject.code);
 });
