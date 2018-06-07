@@ -18,11 +18,32 @@ var destination = "";
 var firstTime = "";
 var frequency = 0;
 
-window.onload = function () {
-  // Keep the countdown timer from starting
-  var currTimeDisplay = moment().format("hh:mm A");
-  $("#current-time").html("<h1>The current time is: " + currTimeDisplay + "</h1>");
+// var update = function() {
+//   $("#current-time")= moment().format("LTS"); 
+// };
+
+// setInterval(update, 1000);
+
+function update () {
+  var currTimeDisplay = moment().format("LTS");
+  $("#current-time").html("<h1>Current Train Scheduler time is: " + currTimeDisplay + "</h1>");
+  
+  // $("#current-time") = moment().format("LTS");
+  // setInterval(update, 1000);
 };
+
+$(document).ready(function() {
+  update();
+  setInterval(update, 1000);
+});
+
+// window.onload = function () {
+// $(document).ready(function() {
+  
+
+// })
+  
+// };
 
 
 // Event listenter for the submit button click event
@@ -113,3 +134,5 @@ database.ref().on("child_added", function (snapshot) {
 }, function (errorObject) {
   console.log("Errors handled: " + errorObject.code);
 });
+
+update();

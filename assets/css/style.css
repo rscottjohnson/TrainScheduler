@@ -16,39 +16,35 @@ body {
   margin: 20px 0px 20px 0px;
 }
 
-.display-4 {
+.display-4,
+.lead,
+#current-time,
+.train-table,
+.add-train,
+.table {
   font-family: 'Carrois Gothic SC', sans-serif;
   color: #FBFBFB;
+}
+
+.display-4 {
   text-shadow: 2px 2px #0C1C2C;
 }
 
 .lead {
-  font-family: 'Carrois Gothic SC', sans-serif;
-  color: #FBFBFB;
   font-size: 32px;
   background-color: rgba(251, 251, 251, 0.2);
 }
 
 #current-time {
-  color: #FBFBFB;
-  font-family: 'Carrois Gothic SC', sans-serif;
   margin: 0px 0px 0px 10px;
 }
 
 .train-table {
   background-color: #0C1C2C;
-  color: #FBFBFB;
-  font-family: 'Carrois Gothic SC', sans-serif;
 }
 
 .add-train {
   background-color: #0C1C2C;
-  color: #FBFBFB;
-  font-family: 'Carrois Gothic SC', sans-serif;
-}
-
-.table {
-  font-family: 'Carrois Gothic SC', sans-serif;
 }
 
 .btn-custom {
@@ -67,5 +63,5 @@ body {
   text-align: center;
   font-size: 12px;
   border-top: 5px solid #FBFBFB;
-  font-family: "IBM Plex Mono", monospace;
+  font-family: "Carrois Gothic SC", monospace;
 }
