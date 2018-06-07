@@ -1,3 +1,6 @@
+// VARIABLES
+// ==============================================================================
+
 // Initialize the Firebase database
 var config = {
   apiKey: "AIzaSyARYKUXmQcmsDfTx7zNa-Fa0RK4lKRUM0k",
@@ -12,44 +15,33 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
-// Set some initial values for our variables
+// Set initial values
 var trainName = "";
 var destination = "";
 var firstTime = "";
 var frequency = 0;
 
-// var update = function() {
-//   $("#current-time")= moment().format("LTS"); 
-// };
 
-// setInterval(update, 1000);
+// FUNCTIONS
+// ==============================================================================
 
+// Update the current time display
 function update () {
   var currTimeDisplay = moment().format("LTS");
   $("#current-time").html("<h1>Current Train Scheduler time is: " + currTimeDisplay + "</h1>");
-  
-  // $("#current-time") = moment().format("LTS");
-  // setInterval(update, 1000);
 };
 
+// Run the update current time display function
 $(document).ready(function() {
   update();
   setInterval(update, 1000);
 });
 
-// window.onload = function () {
-// $(document).ready(function() {
-  
-
-// })
-  
-// };
-
-
 // Event listenter for the submit button click event
 $("#submitButton").on("click", function (event) {
   event.preventDefault();
 
+  // Capture the values entered into the form and store them in variables
   trainName = $("#newTrainID").val().trim();
   console.log("Train Name: " + trainName);
 
@@ -62,6 +54,7 @@ $("#submitButton").on("click", function (event) {
   frequency = $("#newFrequencyID").val().trim();
   console.log("Train frequency: " + frequency);
 
+  // Add those values to our database
   database.ref().push({
     TrainName: trainName,
     Destination: destination,
@@ -70,6 +63,7 @@ $("#submitButton").on("click", function (event) {
     timeSubmitted: firebase.database.ServerValue.TIMESTAMP
   });
 
+  // Reset the form fields
   $("#newTrainID").val("");
   $("#newDestinationID").val("");
   $("#newTimeID").val("");
@@ -82,34 +76,36 @@ database.ref().on("child_added", function (snapshot) {
   // storing the snapshot.val() in a variable for convenience
   var sv = snapshot.val();
 
+  // Log the snapshot values for inspection
   console.log(sv.TrainName);
   console.log(sv.Destination);
   console.log(sv.FirstTrainTime);
   console.log(sv.Frequency);
 
+  // Convert the first train time and push it back 1 day to make sure it comes before current time
   var firstTimeConverted = moment(sv.FirstTrainTime, "HH:mm").subtract(1, "days");
 
   var currentTime = moment().format("hh:mm");
   console.log("Current time: " + currentTime);
 
-  // Difference between the times
+  // Determine the difference between the current and first train times
   var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
   console.log("Difference in time in minutes is: " + diffTime);
 
-  // Time apart (remainder)
+  // Determine the time apart (remainder)
   var remainder = diffTime % sv.Frequency;
   console.log("Time remainder: " + remainder);
 
-  // Minutes Until Train
+  // Determine the minutes until the next train
   var minutesAway = sv.Frequency - remainder;
   console.log("Minutes until the next train: " + minutesAway);
 
-  // Next Train
+  // Determine the next arrival time for the train
   var nextArrival = moment().add(minutesAway, "minutes");
   var nextArrivalConverted = moment(nextArrival).format("hh:mm A");
   console.log("Arrival time: " + moment(nextArrival).format("hh:mm"));
 
-  //add new rows to table
+  //Add new rows to the table
   var trainRow = $("<tr>");
   var trainNameData = $("<td>");
   trainNameData.append(sv.TrainName);
@@ -122,17 +118,17 @@ database.ref().on("child_added", function (snapshot) {
   var minutesData = $("<td>");
   minutesData.append(minutesAway);
 
+  // Append the data to the train row
   trainRow.append(trainNameData);
   trainRow.append(destinationData);
   trainRow.append(frequencyData);
   trainRow.append(arrivalData);
   trainRow.append(minutesData);
 
+  // Append the train tow to the table
   $("#tablebody").append(trainRow);
 
   // Handle the errors
 }, function (errorObject) {
   console.log("Errors handled: " + errorObject.code);
 });
-
-update();
